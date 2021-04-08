@@ -16,7 +16,6 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
-    <script src ="OpenLayers-2.13.1/OpenLayers.js"></script>
     <script src = "script.js"></script>
 </head>
 
@@ -25,20 +24,23 @@
         th{ 
             color:#fff;
                 }
+        
     </style>
-    <div class="container">
+    <div class="container" style="margin:auto">
         <table class="table table-striped">
             <tr class="bg-info">
                 <th>Callsign</th>
+                <th>Departure</th>
                 <th>Destination</th>
                 <th>Aircraft</th>
+                <th>Gate</th>
             </tr>
             <tbody id="myTable">
             </tbody>
         </table>
     </div>
-    <div class="container">
-        <div id="mapid" style="width: 1110px; height: 600px;"></div>
+    <div class="container" style="margin:auto">
+        <div id="mapid" style="width: 100%; height: 600px;"></div>
     </div>
 </body>
 </html>

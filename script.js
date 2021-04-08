@@ -1,16 +1,16 @@
 let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json";
 let dataStream2 = "https://cors.bridged.cc/https://data.vatsim.net/v3/vatsim-data.json";
+let datawocors = "https://data.vatsim.net/v3/vatsim-data.json";
 let trafficArray = [];
 let pilotTable = null;
 let long_episilon = 0.00030000;
 let lati_episilon = 0.00020000;
 let flights = null;
 
-setInterval(update_all, 120*1000);
+setInterval(update_all, 300*1000);
 
 $(document).ready(function() {   
     $.getJSON(vatsimData, function(data){
-        console.log(data["general"]["update_timestamp"])
         flights = data["pilots"];
         for (i = 0; i < flights.length; i++) {
             if (flights[i]["flight_plan"] == null) {
@@ -21,8 +21,9 @@ $(document).ready(function() {
         }
         // console.log(flights);
         // console.log(trafficArray)
-        load_table();
         map_init();
+        load_table();
+        document.getElementById("time").innerHTML = "Last Updated: " + data["general"]["update_timestamp"];
     })
 });
 
@@ -40,13 +41,11 @@ function map_init() {
                 var diff_long = Math.abs(flights[a]["longitude"] - gatedata[b]["longitude"]);
                 var diff_lati = Math.abs(flights[a]["latitude"] - gatedata[b]["latitude"]);
                 if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
-                    // console.log(diff_lati);
-                    // console.log(diff_long);
-                    gatedata[b]["occupied"] = "true";
+                    gatedata[b]["occupied"] = flights[a]["callsign"];
                 }
             }
         }
-        console.log(gatedata);
+        // console.log(gatedata);
         for (i = 0; i < gatedata.length; i++) {
             if (gatedata[i]["occupied"] == "false") {
                 var circle = L.circle([gatedata[i]["latitude"], gatedata[i]["longitude"]], {
@@ -55,7 +54,7 @@ function map_init() {
                     fillOpacity: 0.5,
                     radius: 15
                 }).addTo(mymap);
-            } else if (gatedata[i]["occupied"] == "true") {
+            } else {
                 var circle = L.circle([gatedata[i]["latitude"], gatedata[i]["longitude"]], {
                     color: 'red',
                     // fillColor: '#f03',

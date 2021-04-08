@@ -17,6 +17,8 @@ $(document).ready(function() {
                trafficArray.push(flights[i]); //needed edit...
             }
         }
+        console.log(flights);
+        console.log(trafficArray)
         load_table();
         map_init();
     })
@@ -68,6 +70,7 @@ function load_table() {
     for (var i = 0; i < trafficArray.length; i++){
         var row = `<tr>
                         <td>${trafficArray[i]["callsign"]}</td>
+                        <td>${trafficArray[i]["flight_plan"]["departure"]}</td>
                         <td>${trafficArray[i]["flight_plan"]["arrival"]}</td>
                         <td>${trafficArray[i]["flight_plan"]["aircraft"]}</td>
                   </tr>`

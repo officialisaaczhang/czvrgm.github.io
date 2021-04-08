@@ -9,6 +9,10 @@ let flights = null;
 
 setInterval(update_all, 300*1000);
 
+$.ajaxSetup({
+    cache:false
+  });
+
 $(document).ready(function() {   
     $.getJSON(vatsimData, function(data){
         flights = data["pilots"];
@@ -21,9 +25,9 @@ $(document).ready(function() {
         }
         // console.log(flights);
         // console.log(trafficArray)
-        map_init();
         load_table();
-        document.getElementById("time").innerHTML = "Last Updated: " + data["general"]["update_timestamp"];
+        map_init();
+        document.getElementById("time").innerHTML = "Last Updated: " + data["general"]["update_timestamp"] + ", Total connections: " + data["general"]["connected_clients"];
     })
 });
 
@@ -42,6 +46,9 @@ function map_init() {
                 var diff_lati = Math.abs(flights[a]["latitude"] - gatedata[b]["latitude"]);
                 if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
                     gatedata[b]["occupied"] = flights[a]["callsign"];
+                    console.log(gatedata[b])
+                    console.log(diff_long)
+                    console.log(diff_lati)
                 }
             }
         }
@@ -80,5 +87,5 @@ function load_table() {
 }
 
 function update_all() {
-    window.location.reload();
+    window.location.reload(true);
 }

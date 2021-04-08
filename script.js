@@ -1,37 +1,44 @@
 let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json";
-let dataStream2 = "https://cors.bridged.cc/https://data.vatsim.net/v3/vatsim-data.json";
-let datawocors = "https://data.vatsim.net/v3/vatsim-data.json";
-let trafficArray = [];
+let traffic = [];
 let pilotTable = null;
 let long_episilon = 0.00030000;
 let lati_episilon = 0.00020000;
 let flights = null;
 
-setInterval(update_all, 300*1000);
+setInterval(update_all, 120*1000);
 
 $.ajaxSetup({
     cache:false
   });
 
 $(document).ready(function() {   
-    $.getJSON(vatsimData, function(data){
-        flights = data["pilots"];
-        for (i = 0; i < flights.length; i++) {
-            if (flights[i]["flight_plan"] == null) {
-                continue;
-            } else if (flights[i]["flight_plan"]["departure"] == "CYVR" && flights[i]["groundspeed"] == 0) {
-               trafficArray.push(flights[i]); //needed edit...
+    $.getJSON(vatsimData, function(raw){
+        $.getJSON("cyvrjetgates.json", function(gate_info){
+            let flights = raw.pilots;
+            for (f = 0; f < flights.length; f++) {
+                if (flights[f].flight_plan == null) {
+                    continue;
+                } else {
+                    for (g =0; g < gate_info.length; g++) {
+                        var diff_long = Math.abs(flights[f].longitude - gate_info[g].longitude);
+                        var diff_lati = Math.abs(flights[f].latitude - gate_info[g].latitude);
+                        if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
+                            let datastring = [flights[f].callsign, flights[f].flight_plan.departure, 
+                            flights[f].flight_plan.arrival, flights[f].flight_plan.aircraft_short, gate_info[g].gate];
+                            traffic.push(datastring);
+                            gate_info[g].occupied = "true";
+                        }
+                    }
+                }
             }
-        }
-        // console.log(flights);
-        // console.log(trafficArray)
-        load_table();
-        map_init();
-        document.getElementById("time").innerHTML = "Last Updated: " + data["general"]["update_timestamp"] + ", Total connections: " + data["general"]["connected_clients"];
+            map_init(gate_info);
+            load_table();
+            document.getElementById("time").innerHTML = "Last Updated: " + raw.general.update_timestamp + ", Total connections: " + raw.general.connected_clients;
+        })
     })
 });
 
-function map_init() {
+function map_init(gatedata) {
     /* Create map */
     var mymap = L.map('mapid').setView([49.1937222,-123.1738889], 15);
 
@@ -39,48 +46,34 @@ function map_init() {
     {foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}
     ).addTo(mymap);
 
-    $.getJSON("cyvrjetgates.json", function(gatedata){
-        for (a = 0; a < flights.length; a++) {
-            for (b = 0; b < gatedata.length; b++) {
-                var diff_long = Math.abs(flights[a]["longitude"] - gatedata[b]["longitude"]);
-                var diff_lati = Math.abs(flights[a]["latitude"] - gatedata[b]["latitude"]);
-                if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
-                    gatedata[b]["occupied"] = flights[a]["callsign"];
-                    console.log(gatedata[b])
-                    console.log(diff_long)
-                    console.log(diff_lati)
-                }
-            }
+    for (i = 0; i < gatedata.length; i++) {
+        if (gatedata[i].occupied == "false") {
+            var circle = L.circle([gatedata[i].latitude, gatedata[i].longitude], {
+                color: 'green',
+                // fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 15
+            }).addTo(mymap);
+        } else if (gatedata[i].occupied == "true") {
+            var circle = L.circle([gatedata[i].latitude, gatedata[i].longitude], {
+                color: 'red',
+                // fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 15
+            }).addTo(mymap);
         }
-        // console.log(gatedata);
-        for (i = 0; i < gatedata.length; i++) {
-            if (gatedata[i]["occupied"] == "false") {
-                var circle = L.circle([gatedata[i]["latitude"], gatedata[i]["longitude"]], {
-                    color: 'green',
-                    // fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: 15
-                }).addTo(mymap);
-            } else {
-                var circle = L.circle([gatedata[i]["latitude"], gatedata[i]["longitude"]], {
-                    color: 'red',
-                    // fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: 15
-                }).addTo(mymap);
-                }
-        }
-    });
+    }
 }
 
 function load_table() {
     pilotTable = document.getElementById('myTable')
-    for (var i = 0; i < trafficArray.length; i++){
+    for (var i = 0; i < traffic.length; i++){
         var row = `<tr>
-                        <td>${trafficArray[i]["callsign"]}</td>
-                        <td>${trafficArray[i]["flight_plan"]["departure"]}</td>
-                        <td>${trafficArray[i]["flight_plan"]["arrival"]}</td>
-                        <td>${trafficArray[i]["flight_plan"]["aircraft"]}</td>
+                        <td>${traffic[i][0]}</td>
+                        <td>${traffic[i][1]}</td>
+                        <td>${traffic[i][2]}</td>
+                        <td>${traffic[i][3]}</td>
+                        <td>${traffic[i][4]}</td>
                   </tr>`
         pilotTable.innerHTML += row
     }

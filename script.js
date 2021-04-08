@@ -9,6 +9,7 @@ setInterval(update_all, 120*1000);
 
 $(document).ready(function() {   
     $.getJSON(vatsimData, function(data){
+        console.log(data["general"]["update_timestamp"])
         flights = data["pilots"];
         for (i = 0; i < flights.length; i++) {
             if (flights[i]["flight_plan"] == null) {
@@ -17,8 +18,8 @@ $(document).ready(function() {
                trafficArray.push(flights[i]); //needed edit...
             }
         }
-        console.log(flights);
-        console.log(trafficArray)
+        // console.log(flights);
+        // console.log(trafficArray)
         load_table();
         map_init();
     })
@@ -38,8 +39,8 @@ function map_init() {
                 var diff_long = Math.abs(flights[a]["longitude"] - gatedata[b]["longitude"]);
                 var diff_lati = Math.abs(flights[a]["latitude"] - gatedata[b]["latitude"]);
                 if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
-                    console.log(diff_lati);
-                    console.log(diff_long);
+                    // console.log(diff_lati);
+                    // console.log(diff_long);
                     gatedata[b]["occupied"] = "true";
                 }
             }

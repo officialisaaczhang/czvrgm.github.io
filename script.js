@@ -1,4 +1,4 @@
-let vatsimData = "https://data.vatsim.net/v3/vatsim-data.json";
+let vatsimData = "https://cors-anywhere.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json";
 let trafficArray = [];
 let pilotTable = null;
 let long_episilon = 0.00030000;

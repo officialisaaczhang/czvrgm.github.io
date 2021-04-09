@@ -1,8 +1,8 @@
 let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json?nocache=" + (new Date()).getTime();
 let traffic = [];
 let pilotTable = null;
-let long_episilon = 0.00030000;
-let lati_episilon = 0.00020000;
+let long_episilon = 0.00043000;
+let lati_episilon = 0.00032000;
 let flights = null;
 
 setInterval(update_all, 120*1000);
@@ -23,7 +23,7 @@ $(document).ready(function() {
                     if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
                         if (flights[f].flight_plan == null) {
                             let datastring = [flights[f].callsign, "N/A", 
-                            "N/A", "N/A", gate_info[g].gate]
+                            "N/A", "N/A", gate_info[g].gate];
                             traffic.push(datastring);
                         } else {
                             let datastring = [flights[f].callsign, flights[f].flight_plan.departure, 
@@ -31,7 +31,7 @@ $(document).ready(function() {
                             traffic.push(datastring);
                         }
                         gate_info[g].occupied = "true";
-                        console.log("strip added")
+                        console.log("strip added");
                     }
                 }
             }

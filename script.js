@@ -13,6 +13,7 @@ $.ajaxSetup({
 
 $(document).ready(function() {   
     $.getJSON(vatsimData, function(raw){
+        console.log(raw)
         $.getJSON("cyvrjetgates.json", function(gate_info){
             let flights = raw.pilots;
             for (f = 0; f < flights.length; f++) {
@@ -27,13 +28,15 @@ $(document).ready(function() {
                             flights[f].flight_plan.arrival, flights[f].flight_plan.aircraft_short, gate_info[g].gate];
                             traffic.push(datastring);
                             gate_info[g].occupied = "true";
+                            console.log("strip added")
                         }
                     }
                 }
             }
+            console.log(traffic)
             map_init(gate_info);
             load_table();
-            document.getElementById("time").innerHTML = "Last Updated: " + raw.general.update_timestamp + ", Total connections: " + raw.general.connected_clients + " from " + vatsimData;
+            document.getElementById("time").innerHTML = "Last Updated: " + raw.general.update_timestamp + ", Total connections: " + raw.general.connected_clients;
         })
     })
 });

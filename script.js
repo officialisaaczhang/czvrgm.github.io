@@ -1,4 +1,4 @@
-let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json";
+let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json?nocache=" + (new Date()).getTime();
 let traffic = [];
 let pilotTable = null;
 let long_episilon = 0.00030000;
@@ -33,7 +33,7 @@ $(document).ready(function() {
             }
             map_init(gate_info);
             load_table();
-            document.getElementById("time").innerHTML = "Last Updated: " + raw.general.update_timestamp + ", Total connections: " + raw.general.connected_clients;
+            document.getElementById("time").innerHTML = "Last Updated: " + raw.general.update_timestamp + ", Total connections: " + raw.general.connected_clients + " from " + vatsimData;
         })
     })
 });

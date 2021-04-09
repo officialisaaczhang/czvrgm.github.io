@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYYJ Gate Viewer</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <script src = "script_cyyj.js"></script>
+</head>
+
+<body>
+    <style>
+        th{ 
+            color:#fff;
+                }
+        div {text-align: center;}
+    </style>
+    <div class="container" style="margin:auto">
+        <table class="table table-striped">
+            <tr class="bg-info">
+                <th>Callsign</th>
+                <th>Departure</th>
+                <th>Destination</th>
+                <th>Aircraft</th>
+                <th>Gate</th>
+            </tr>
+            <tbody id="myTable">
+            </tbody>
+        </table>
+    </div>
+    <div class="container" style="margin:auto">
+        <div id="mapid" style="width: 100%; height: 600px;"></div>
+    </div>
+    <div id="time" style="margin:auto">last updated</div>
+</body>
+</html>

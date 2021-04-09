@@ -17,19 +17,21 @@ $(document).ready(function() {
         $.getJSON("cyvrjetgates.json", function(gate_info){
             let flights = raw.pilots;
             for (f = 0; f < flights.length; f++) {
-                if (flights[f].flight_plan == null) {
-                    continue;
-                } else {
-                    for (g =0; g < gate_info.length; g++) {
-                        var diff_long = Math.abs(flights[f].longitude - gate_info[g].longitude);
-                        var diff_lati = Math.abs(flights[f].latitude - gate_info[g].latitude);
-                        if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
+                for (g =0; g < gate_info.length; g++) {
+                    var diff_long = Math.abs(flights[f].longitude - gate_info[g].longitude);
+                    var diff_lati = Math.abs(flights[f].latitude - gate_info[g].latitude);
+                    if (diff_long <= long_episilon && diff_lati <= lati_episilon) {
+                        if (flights[f].flight_plan == null) {
+                            let datastring = [flights[f].callsign, "N/A", 
+                            "N/A", "N/A", gate_info[g].gate]
+                            traffic.push(datastring);
+                        } else {
                             let datastring = [flights[f].callsign, flights[f].flight_plan.departure, 
                             flights[f].flight_plan.arrival, flights[f].flight_plan.aircraft_short, gate_info[g].gate];
                             traffic.push(datastring);
-                            gate_info[g].occupied = "true";
-                            console.log("strip added")
                         }
+                        gate_info[g].occupied = "true";
+                        console.log("strip added")
                     }
                 }
             }

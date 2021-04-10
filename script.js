@@ -1,8 +1,8 @@
 let vatsimData = "https://afternoon-journey-90339.herokuapp.com/https://data.vatsim.net/v3/vatsim-data.json?nocache=" + (new Date()).getTime();
 let traffic = [];
 let pilotTable = null;
-let long_episilon = 0.00043000;
-let lati_episilon = 0.00032000;
+let long_episilon = 0.00034500;
+let lati_episilon = 0.00030000;
 let flights = null;
 
 setInterval(update_all, 120*1000);
